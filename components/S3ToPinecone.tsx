@@ -1,13 +1,17 @@
-"use client"
+"use client";
 
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { Button } from "./ui/button";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Loader } from "lucide-react";
 
 const ChatCreater = () => {
   const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
   const { mutate } = useMutation({
     mutationFn: async ({ file_key, file_name }: { file_key: string; file_name: string }) => {
       const response = await axios.post("/api/create-chat", {
@@ -19,10 +23,12 @@ const ChatCreater = () => {
   });
 
   const handleClick = async () => {
+    setLoading(true);
+    toast.loading("Started loading chats...", { duration: 3000 });
     try {
       const data = {
         file_key: "data.pdf",
-        file_name: "data.pdf",
+        file_name: "Flight",
       };
 
       const result = await mutate(data, {
@@ -35,8 +41,10 @@ const ChatCreater = () => {
           console.error("Mutation failed with error:", error);
           toast.error("Error creating chat");
         },
+        onSettled: () => {
+          setLoading(false);
+        },
       });
-
       console.log("Mutation result:", result);
     } catch (error) {
       console.error("Error during mutation:", error);
@@ -44,8 +52,17 @@ const ChatCreater = () => {
   };
 
   return (
-    <div className="flex mt-2">    
-      <Button onClick={handleClick}>Go to Chats!</Button>
+    <div className="flex mt-2">
+      <Button onClick={handleClick} disabled={loading}>
+        {loading ? (
+          <>
+            Loading...
+            <Loader className="w-5 h-5 ml-2 animate-spin" />
+          </>
+        ) : (
+          "Go to Chats!"
+        )}
+      </Button>
     </div>
   );
 };

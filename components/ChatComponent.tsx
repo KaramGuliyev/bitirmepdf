@@ -45,7 +45,7 @@ const ChatComponent = (chatId: Props) => {
     <div className="relative max-h-screen w-3/4">
       {/* header */}
       <div className="sticky top-0 inset-x-0 p-2 bg-white h-fit">
-        <h3 className="text-xl font-bold">Chat</h3>
+        <h3 className="text-xl font-bold">TicketBot</h3>
       </div>
 
       {/* message list */}
