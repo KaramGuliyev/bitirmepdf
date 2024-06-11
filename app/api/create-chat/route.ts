@@ -16,13 +16,12 @@ export async function POST(req: Request) {
     const { file_key, file_name } = body;
     await loadS3IntoPinecone(file_key);
 
-    // İlk olarak veriyi ekle ve ID'yi al
     const insertedChat = await db
       .insert(chats)
       .values({
         fileKey: file_key,
-        pdfName: "", // İlk başta boş string olarak ekliyoruz
-        pdfUrl: getS3Url(file_key),
+        dataName: "",
+        dataUrl: getS3Url(file_key),
         userId,
       })
       .returning({
@@ -31,22 +30,21 @@ export async function POST(req: Request) {
 
     const insertedId = insertedChat[0].insertedId;
 
-    // PDF adını ID ile güncelle
     const updatedChat = await db
       .update(chats)
       .set({
-        pdfName: `${file_name} ${insertedId}`,
+        dataName: `${file_name} ${insertedId}`,
       })
-      .where(eq(chats.id, insertedId)) // where koşulu
+      .where(eq(chats.id, insertedId))
       .returning({
         id: chats.id,
-        pdfName: chats.pdfName,
+        dataName: chats.dataName,
       });
 
     return NextResponse.json(
       {
         chat_id: updatedChat[0].id,
-        pdf_name: updatedChat[0].pdfName,
+        data_name: updatedChat[0].dataName,
       },
       { status: 200 }
     );

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { chats } from "@/lib/db/schema";
+import { chats, messages } from "@/lib/db/schema";
 import { loadS3IntoPinecone } from "@/lib/pinecone";
 import { getS3Url } from "@/lib/s3";
 import { auth } from "@clerk/nextjs";
@@ -15,6 +15,7 @@ export async function DELETE(req: Request) {
     const body = await req.json();
     const { chatId } = body;
 
+    const deletedMessages = await db.delete(messages).where(eq(messages.chatId, chatId))
     const insertedChat = await db.delete(chats).where(eq(chats.id, chatId)).returning({
       insertedId: chats.id,
     });

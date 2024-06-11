@@ -82,6 +82,7 @@ const ChatSideBar = ({ chats, chatId /*isPro*/ }: Props) => {
         router.refresh();
       } else {
         console.error("Error:", data.error);
+        toast.dismiss();
         toast.error("Error deleting chat");
       }
     } catch (error) {
@@ -113,7 +114,7 @@ const ChatSideBar = ({ chats, chatId /*isPro*/ }: Props) => {
                 })}
               >
                 <MessageCircle className="mr-2" />
-                <p className="w-full overflow-hidden text-sm truncate whitespace-nowrap text-ellipsis">{chat.pdfName}</p>
+                <p className="w-full overflow-hidden text-sm truncate whitespace-nowrap text-ellipsis">{chat.dataName}</p>
                 <Delete
                   className="w-4 h-4 ml-2 cursor-pointer"
                   onClick={(e) => {

@@ -12,8 +12,8 @@ export const userSystemEnum = pgEnum("user_system_enum", ["system", "user"]);
 
 export const chats = pgTable("chats", {
   id: serial("id").primaryKey(),
-  pdfName: text("pdf_name").notNull(),
-  pdfUrl: text("pdf_url").notNull(),
+  dataName: text("data_name").notNull(),
+  dataUrl: text("data_url").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   userId: varchar("user_id", { length: 256 }).notNull(),
   fileKey: text("file_key").notNull(),
