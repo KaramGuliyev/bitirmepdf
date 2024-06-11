@@ -78,7 +78,7 @@ const ChatSideBar = ({ chats, chatId /*isPro*/ }: Props) => {
       if (response.ok) {
         console.log("Chat deleted successfully");
         toast.dismiss();
-        toast.success("Chat deleted successfully, Refreshing... ");
+        toast.success("Chat deleted successfully.");
         router.refresh();
       } else {
         console.error("Error:", data.error);
